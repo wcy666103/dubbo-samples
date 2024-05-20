@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Check License
+#        一个全功能的许可证工具，用于检查和修复许可证标题并解决依赖项的许可证。skywalking-eyes 空中漫步之眼
         uses: apache/skywalking-eyes@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

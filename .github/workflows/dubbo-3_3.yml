@@ -48,6 +48,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 21
+#          build之后进行clean
       - name: Build with Maven
         run: |
           ./mvnw $BUILD_OPTS
@@ -59,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-    # Map a step output to a job output
+    # Map a step output to a job output   将步骤输出映射到作业输出
     outputs:
       commit_id: ${{ steps.git-checker.outputs.commit_id }}
       version: ${{ steps.git-checker.outputs.version }}
