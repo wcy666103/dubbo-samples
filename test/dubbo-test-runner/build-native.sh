@@ -14,4 +14,5 @@ mkdir -p $DOCKER_DIR
 cp -r $DIR/src/native/* $DOCKER_DIR/
 
 cd $DOCKER_DIR
+#docker build是直接使用dockerfile，-t 是进行打标签
 docker build -t dubbo/native-sample-test:$JAVA_VER .  --build-arg JAVA_VER=$JAVA_VER

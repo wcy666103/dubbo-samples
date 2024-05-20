@@ -1,7 +1,9 @@
 #!/bin/bash
+# 匹配对应的 版本
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+#通过 pom文件来哎确定projects
 all_projects=`find $DIR/../.. -name pom.xml`
 project_count=`echo $all_projects | tr ' ' '\n' | grep -c ""`
 echo "Total projects: $project_count"
@@ -14,6 +16,7 @@ while read project
 do
 #    echo "project: $project"
     project_dir=`dirname $project`
+#    如果没有该文件就继续
     if [ ! -f $project_dir/case-configuration.yml ]; then
       continue
     fi

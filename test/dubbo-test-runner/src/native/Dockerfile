@@ -52,9 +52,11 @@ ENV JAVA_OPTS="" \
     CHECK_LOG="" \
     TEST_PATTERNS="**/*IT.class"
 
+#将该目录下的所有 sh文件都加入进去
 ADD *.sh /usr/local/dubbo/
 
 WORKDIR /usr/local/dubbo/
+#启动run.sh
 ENTRYPOINT ["bash", "./run.sh"]
 
 
