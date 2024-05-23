@@ -16,6 +16,7 @@ if [ $result -ne 0 ]; then
   exit $result
 fi
 
+#拷贝 jar包和 docker目录下的一些东西
 mkdir -p $DOCKER_DIR
 cp -r $DIR/src/docker/* $DOCKER_DIR/
 cp $DIR/target/dubbo-test-runner-*-jar-with-dependencies.jar $DOCKER_DIR/dubbo-test-runner.jar

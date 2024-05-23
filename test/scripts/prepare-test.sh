@@ -27,5 +27,18 @@ do
   echo ${file%/$CONFIG_FILE} >> $jobs_dir/testjob_${job}.txt
 done < $test_list_file
 
+#Total 94 cases split into 5 jobs:
 echo "Total $case_index cases split into $JOB_COUNT jobs:"
 grep -r "" -c $jobs_dir
+
+
+# 脚本总输出：
+#JOB_COUNT: 5
+ #Searching all 'case-configuration.yml' under dir /home/wcy_spark/dubbo-samples ..
+ #Total 94 cases split into 5 jobs:   下边都是真实存在的文件：文件行数量
+ #/home/wcy_spark/dubbo-samples/test/scripts/../jobs/testcases.txt:94
+ #/home/wcy_spark/dubbo-samples/test/scripts/../jobs/testjob_1.txt:19
+ #/home/wcy_spark/dubbo-samples/test/scripts/../jobs/testjob_2.txt:19
+ #/home/wcy_spark/dubbo-samples/test/scripts/../jobs/testjob_3.txt:19
+ #/home/wcy_spark/dubbo-samples/test/scripts/../jobs/testjob_4.txt:19
+ #/home/wcy_spark/dubbo-samples/test/scripts/../jobs/testjob_5.txt:18

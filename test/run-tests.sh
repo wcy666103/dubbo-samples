@@ -145,6 +145,7 @@ function process_case() {
   # generate version matrix
   version_log_file=$project_home/version-matrix.log
   version_matrix_file=$project_home/version-matrix.txt
+#  java -jar 运行 VersionMatcher
   java -DcandidateVersions="$CANDIDATE_VERSIONS" \
     -DcaseVersionsFile="$ver_file" \
     -DcaseVersionSourcesFile="$ver_src_file" \

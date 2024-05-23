@@ -2,6 +2,8 @@
 set -x
 echo "Start at: $(date "+%Y-%m-%d %H:%M:%S")"
 
+# 本地测试构建的一种方式
+
 DIR=/usr/local/dubbo
 cd $DIR
 
