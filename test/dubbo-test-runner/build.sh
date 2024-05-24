@@ -4,7 +4,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 JAVA_VER=${JAVA_VER:-8}
 
-# 会创建target/docker 目录
 DOCKER_DIR=$DIR/target/docker
 
 echo "Building dubbo-test-runner .."
@@ -17,12 +16,10 @@ if [ $result -ne 0 ]; then
   exit $result
 fi
 
-#拷贝 jar包和 src中docker目录下的一些东西 拷贝到这个目录下
+#拷贝 jar包和 docker目录下的一些东西 到 docker images 中
 mkdir -p $DOCKER_DIR
 cp -r $DIR/src/docker/* $DOCKER_DIR/
 cp $DIR/target/dubbo-test-runner-*-jar-with-dependencies.jar $DOCKER_DIR/dubbo-test-runner.jar
 
-# 进入 target/docker目录下
 cd $DOCKER_DIR
-#docker构建镜像
 docker build -t dubbo/sample-test:$JAVA_VER . --build-arg DEBIAN_MIRROR=$DEBIAN_MIRROR  --build-arg JAVA_VER=$JAVA_VER

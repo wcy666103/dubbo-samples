@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# 和 build-test-image 内容一样
 # Use mirror:
 # DEBIAN_MIRROR=http://mirrors.aliyun.com ./build-test-image.sh
 
