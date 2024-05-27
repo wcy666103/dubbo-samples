@@ -21,10 +21,17 @@ package org.apache.dubbo.scenario.builder.vo;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 对 caseconfiguration的文件解读的抽象
+ */
 public class CaseConfiguration {
     private String from;
     private Map<String, String> props;
     private List<String> systemProps;
+
+    /**
+     * 服务和配置的结合对象
+     */
     private Map<String, ServiceComponent> services;
     private int timeout;
     private String ignoreFor;

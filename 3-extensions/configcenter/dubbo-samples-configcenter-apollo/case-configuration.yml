@@ -51,6 +51,7 @@ services:
       - apollo.port=8080
     waitPortsBeforeRun:
       - dubbo-samples-configcenter-apollo:2181
+      -
       - dubbo-samples-configcenter-apollo:20880
       - apollo-quick-start:8080
       - apollo-quick-start:8090
@@ -67,6 +68,7 @@ services:
       - 8080
       - 8090
     environment:
+#      因为这个 地方，已经被 读取的时候封装成字符串了，所以说  这里边的参数别带 ""  要不然是会报错的！
       - APOLLO_SERVICE=1
       - DB_ADDRESS=apollo-db:3306
     volumes:
@@ -78,6 +80,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 60
+
+
 
   apollo-db:
     image: mysql:5.7

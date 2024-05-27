@@ -20,7 +20,7 @@ if [ "$SERVICE_NAME" == "" ]; then
   return 1
 fi
 
-# 根据传入参数决定调用喔咕哪个脚本
+# 根据传入参数决定调用哪个脚本
 if [ "$SERVICE_TYPE" == "nativeApp"  ]; then
   script_file=$DIR/run-dubbo-native-app.sh
 elif [ "$SERVICE_TYPE" == "nativeTest"  ]; then

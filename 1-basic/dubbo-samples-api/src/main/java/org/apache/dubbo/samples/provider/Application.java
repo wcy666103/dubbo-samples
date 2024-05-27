@@ -28,6 +28,7 @@ public class Application {
         DubboBootstrap.getInstance()
                 .application(ApplicationBuilder.newBuilder().name("dubbo-samples-api").logger("slf4j").build())
                 .protocol(ProtocolBuilder.newBuilder().name("tri").port(50052).build())
+//                直接设置 ref了
                 .service(ServiceBuilder.newBuilder().interfaceClass(GreetingsService.class).ref(new GreetingsServiceImpl()).build())
                 .start()
                 .await();

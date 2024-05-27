@@ -32,6 +32,7 @@
 
     <dubbo:protocol name="rocketmq" id="rocketmq">
         <dubbo:parameter key="groupModel" value="topic"/>
+        <dubbo:parameter key="topic" value="test"/>
     </dubbo:protocol>
 
     <bean id="demoService" class="org.apache.dubbo.samples.rocketmq.impl.DemoServiceImpl"/>

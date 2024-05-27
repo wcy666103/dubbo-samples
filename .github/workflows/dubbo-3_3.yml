@@ -28,6 +28,7 @@ env:
     '
   DUBBO_REF: '3.3'
 
+# 不同的作业（jobs）中运行的，每个作业都有自己的独立环境和文件系统，它们之间的状态和文件不会直接共享。
 jobs:
   build-samples:
     needs: [build-dubbo]

@@ -15,6 +15,7 @@ if [ -f "${SERVICE_NAME}" ]; then
 fi
 
 echo "Build native app : ..."
+#不能clean，因为  run-native-tests.sh 已经跑起来了
 mvn --no-transfer-progress native:compile -Dmaven.test.skip=true -Pnative 2>&1 # no clean package here cause run-native-tests.sh has run it
 result=$?
 if [ $result -ne 0 ]; then
@@ -22,6 +23,7 @@ if [ $result -ne 0 ]; then
   exit 1
 fi
 
+# case-configuration中配置过的，需要等这些端口开了之后才往下进行
 # wait ports before run app: WAIT_PORTS_BEFORE_RUN=host:port;host:port
 if [ "$WAIT_PORTS_BEFORE_RUN" != "" ]; then
   echo "Waiting ports before run native app .."
@@ -41,6 +43,7 @@ fi
 
 echo "Running native app : ..."
 start=$SECONDS
+#就是将这个jar包运行？
 ./target/${SERVICE_NAME} $JAVA_OPTS 2>&1 &
 pid=$!
 

@@ -82,20 +82,27 @@ jobs:
           commit_id=`git log --format="%H" -n 1`
           echo "::set-output name=commit_id::$commit_id"
           echo "commit_id: $commit_id"
+#            将 Dubbo 项目的 Maven 依赖缓存到本地，以提高后续构建速度
       - name: Dubbo cache
         id: dubbocache
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository/org/apache/dubbo
+#          Cache local Maven repository 步骤根据项目的 pom.xml 文件的哈希值，缓存本地 Maven 仓库中与 Dubbo 项目相关的依赖。如果缓存命中，则跳过此步骤。
           key: ${{ runner.os }}-dubbo-snapshot-${{steps.git-checker.outputs.commit_id}}
       - name: Cache local Maven repository
+#        cache-hit 属性的值是一个布尔值，指示缓存是否命中。如果缓存命中，它的值将为 true，否则为 false
         if: steps.dubbocache.outputs.cache-hit != 'true'
+#        通过 if: steps.dubbocache.outputs.cache-hit != 'true' 条件来检查之前的步骤 Dubbo cache 是否已经成功地缓存了依赖，如果缓存命中了（即 cache-hit 为 true），则不执行此步骤，直接跳过。
         uses: actions/cache@v3
+#        with 下的 path 参数指定了需要缓存的目录，这里是 ~/.m2/repository，即 Maven 默认的本地仓库路径。key 参数定义了用于识别缓存的唯一键，它是一个复杂的字符串，包括了操作系统类型、Dubbo 版本、以及根据 pom.xml 文件生成的哈希值
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-dubbo-${{env.DUBBO_REF}}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
+#              恢复键：restore-keys 参数指定了备用的键列表，用于在找不到主键对应的缓存时尝试恢复缓存。这个列表通常是用来处理缓存键更新或变更的情况。
             ${{ runner.os }}-dubbo-${{env.DUBBO_REF}}-maven-
+#              这个步骤似乎是有点多余了，为什么 缓存没命中就在装一个 8呢？？
       - name: Set up JDK 8
         if: steps.dubbocache.outputs.cache-hit != 'true'
         uses: actions/setup-java@v3

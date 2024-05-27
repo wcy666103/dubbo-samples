@@ -37,6 +37,7 @@
 
     <dubbo:consumer>
         <dubbo:parameter key="groupModel" value="topic"/>
+        <dubbo:parameter key="topic" value="test"/>
     </dubbo:consumer>
 
     <dubbo:reference id="demoService"

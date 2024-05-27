@@ -26,11 +26,14 @@ import org.apache.dubbo.samples.api.GreetingsService;
 
 public class Application {
     public static void main(String[] args) throws IOException {
+//        直接使用核心api进行使用
         ReferenceConfig<GreetingsService> reference =
                 ReferenceBuilder.<GreetingsService>newBuilder()
                 .interfaceClass(GreetingsService.class)
+//                        直接写入 Provider的地址
                 .url("tri://localhost:50052")
                 .build();
+
         DubboBootstrap.getInstance().reference(reference).start();
         GreetingsService service = reference.get();
 

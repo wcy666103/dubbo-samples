@@ -72,8 +72,8 @@ public class VersionMatcher {
         String caseVersionSourcesFile = System.getProperty(CASE_VERSION_SOURCES_FILE);
         String candidateVersionListStr = System.getProperty(CANDIDATE_VERSIONS);
         String outputFile = System.getProperty(OUTPUT_FILE);
-        // whether include specific version which defined in case-versions.conf
-        // specific version: a real version not contains wildcard '*'
+        // whether include specific version which defined in case-versions.conf 是否包含case-versions.conf中定义的特定版本
+        // specific version: a real version not contains wildcard '*' 特定版本:不包含通配符“*”的真实版本
         boolean includeCaseSpecificVersion = Boolean.parseBoolean(System.getProperty(INCLUDE_CASE_SPECIFIC_VERSION, "true"));
 
         if (StringUtils.isBlank(candidateVersionListStr)) {
@@ -118,7 +118,7 @@ public class VersionMatcher {
                 candidateVersionFromRemoteMap.computeIfAbsent(k, i -> new ArrayList<>())
                         .addAll(v));
 
-        // parse case version match rules
+        // parse case version match rules  读取 case-versions中的所有 key -versions
         Map<String, List<MatchRule>> caseVersionMatchRules = parseCaseVersionMatchRules(caseVersionsFile);
 
         // Filter caseVersionMatchRules
@@ -224,6 +224,7 @@ public class VersionMatcher {
      */
     private static void chooseActiveDubboVersionRule(Map<String, List<MatchRule>> caseVersionMatchRules) {
         for (String key : caseVersionMatchRules.keySet()) {
+//            如果非空并且
             if (!extractDubboServiceName(key).isEmpty() && caseVersionMatchRules.get(Constants.DUBBO_VERSION_KEY) != null) {
                 errorAndExit(Constants.EXIT_FAILED, "The config item dubbo.version and dubbo.{service}.version can't appear simultaneously");
             }
@@ -304,11 +305,13 @@ public class VersionMatcher {
             String content = FileUtil.readFully(caseVersionsFile);
             BufferedReader br = new BufferedReader(new StringReader(content));
             String line;
+//            只要没读完就接着读
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.startsWith("#") || StringUtils.isBlank(line)) {
                     continue;
                 }
+//                字符串截取
                 int p = line.indexOf('=');
                 String component = line.substring(0, p);
                 String serviceName = extractDubboServiceName(component);
@@ -334,8 +337,10 @@ public class VersionMatcher {
                         }
                     }
                 }
+//                dubbo.version 还是 spring.version 或者是其他
                 ruleMap.put(component, ruleList);
             }
+//            所有的名字 + 版本都在ruleMap中进行存储
             return ruleMap;
         } catch (Exception e) {
             logger.error("Parse case versions rules failed: {}", caseVersionsFile, e);
@@ -458,6 +463,12 @@ public class VersionMatcher {
         return versionMap;
     }
 
+    /**
+     * 为了 shell那边比较方面获取结果
+     * @param exitCode
+     * @param format
+     * @param arguments
+     */
     private static void errorAndExit(int exitCode, String format, Object... arguments) {
         //insert ERROR_MSG_FLAG before error msg
         Object[] newArgs = new Object[arguments.length + 1];

@@ -23,6 +23,7 @@
 #  dubbo_port: 20880
 #  zookeeper_version: latest
 
+# 使用外部 zk的配置，自动将 zk 地址弄到 Provider地址中去
 
 props:
 #  project_name: dubbo-samples-xxx
@@ -39,6 +40,7 @@ services:
   ${project_name}:
     type: app
     basedir: ${project_dir}
+#    子 yml 中需要声明的
     mainClass: ${main_class}
     systemProps:
       - zookeeper.address=zookeeper
@@ -46,12 +48,14 @@ services:
     waitPortsBeforeRun:
       - zookeeper:2181
     checkPorts:
+#       子 yml 中声明的
       - ${dubbo_port}
     checkLog: ${check_log}
 
   ${project_name}-test:
     type: test
     basedir: ${project_dir}
+#    运行这个类
     tests:
       - "**/*IT.class"
     systemProps:

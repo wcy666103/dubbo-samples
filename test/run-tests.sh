@@ -145,7 +145,7 @@ function process_case() {
   # generate version matrix
   version_log_file=$project_home/version-matrix.log
   version_matrix_file=$project_home/version-matrix.txt
-#  java -jar 运行 VersionMatcher
+#  java -jar 运行 VersionMatcher  进行版本匹配
   java -DcandidateVersions="$CANDIDATE_VERSIONS" \
     -DcaseVersionsFile="$ver_file" \
     -DcaseVersionSourcesFile="$ver_src_file" \
@@ -154,7 +154,7 @@ function process_case() {
     org.apache.dubbo.scenario.builder.VersionMatcher &> $version_log_file
   result=$?
   if [ $result -ne 0 ]; then
-    #extract error msg
+    #extract error msg 提取error信息
     error_msg=`get_error_msg $version_log_file`
 
     if [ $result -eq $EXIT_UNMATCHED ]; then

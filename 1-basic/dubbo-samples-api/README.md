@@ -1,5 +1,7 @@
 # About this sample
 
+直接使用 dubbo的 核心 api进行使用
+
 This example demonstrates building up of Dubbo rpc server and client with lightweight API. The API is quite simple and straightforward.
 
 Follow steps below to run this example.

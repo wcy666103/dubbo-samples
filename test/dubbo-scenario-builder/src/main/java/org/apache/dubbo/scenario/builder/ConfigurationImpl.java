@@ -201,8 +201,9 @@ public class ConfigurationImpl implements IConfiguration {
             caseConfiguration.setSystemProps(systemProps);
         }
 
-        //merge services
+        //merge services  将 case-configuration.yml中的services进行合并
         if (parentConfiguration != null && parentConfiguration.getServices() != null) {
+//            转换 service - component
             Map<String, ServiceComponent> newServices = new LinkedHashMap<>(parentConfiguration.getServices());
             if (caseConfiguration.getServices() != null) {
                 newServices.putAll(caseConfiguration.getServices());
