@@ -19,7 +19,7 @@
 # constants
 ERROR_MSG_FLAG=":ErrorMsg:"
 
-
+# 确定目录
 PRG="$0"
 PRGDIR=`dirname "$PRG"`
 [ -z "$SCENARIO_HOME" ] && SCENARIO_HOME=`cd "$PRGDIR" >/dev/null; pwd`
@@ -71,6 +71,7 @@ function redirect_all_container_logs() {
   done
 }
 
+# 将 docker 容器的日志重定向到指定的log中，以方便查看
 function redirect_container_logs() {
   service_name=$1
   container_name=${project_name}-${service_name}-1
@@ -172,6 +173,8 @@ start=$SECONDS
 
 # complete pull fail interactive by <<< "NN"
 echo "[$scenario_name] Starting containers .." | tee -a $scenario_log
+# 这是根据我们写的 case-config.yml 文件进行解读之后的，会生成 对应的docker-compose.yml文件，其中包括自动创建爱你网络等
+# 然后这里就开始运行这个 compose 了
 docker compose -p ${project_name} -f ${compose_file} up -d 2>&1 <<< "NNN" | tee -a $scenario_log > /dev/null
 
 sleep 5

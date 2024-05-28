@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "**"
+#     排除了这两种文件变动
       - "!**/*.md"
       - "!docs/**"
   push:
@@ -11,6 +12,7 @@ on:
       - '**'
       - "!**/*.md"
       - "!docs/**"
+#   允许手动触发该流程
   workflow_dispatch:
 
 env:
@@ -36,8 +38,14 @@ jobs:
     strategy:
       fail-fast: false
     steps:
+#     先checkout，将代码clone下来，然后将 这个源代码仓库进行缓存。其他job用的时候将其发送过去，因为他们内部实现，速度很快的，几百兆每秒
       - uses: actions/checkout@v3
       - name: Cache local Maven repository
+#        构建缓存，可以 让一个job的输出在同一个工作流的不同job之间共享  如果查看日志可以发现：
+#        Received 769113069 of 769113069 (100.0%), 243.9 MBs/sec
+          #Cache restored successfully
+          #Cache restored from key: Linux-samples-maven-5f64df5213324725800cc091e8389dcaba2ca6480a8f206486829568169ab181
+#        应该是内部自己会进行分发
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -134,11 +142,12 @@ jobs:
 # 测试工作开始
   testjob:
     needs: [prepare_test, build-dubbo]
-#    matrix在下边定义
+#    matrix在下边定义 是个数组，会产生多个作业来使用这个数组，两个数组最后就会匹配 4 x 5 = 20个作业出来，是github的ci自动完成的
     name: 'Integration Test (Java${{matrix.java}}, Job${{matrix.job_id}})'
     runs-on: ubuntu-latest
     env:
       JAVA_VER: ${{matrix.java}}
+#      这里会对每个 matrix对应的元素的对应 job，进行环境变量设置
       TEST_CASE_FILE: jobs/testjob_${{matrix.job_id}}.txt
       ALL_REMOTE_VERSION: true
     strategy:
@@ -185,6 +194,7 @@ jobs:
       - name: Run tests
         run: cd test && bash ./run-tests.sh
       - name: Upload test result
+#        无论早期阶段的作业状态如何,都运行作业
         if: always()
         uses: actions/upload-artifact@v3
         with:
@@ -209,5 +219,6 @@ jobs:
         with:
           name: test-result
           path: test/jobs/
+#          也就是合并一下结果，统计一下成功失败啥的数量
       - name: Merge test result - java ${{matrix.java}}
         run: ./test/scripts/merge-test-results.sh

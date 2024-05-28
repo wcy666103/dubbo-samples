@@ -68,6 +68,7 @@
         </dependency>
     </dependencies>
 
+<!--    重要！！！  docker这边运行应该都是将其打包成可运行jar包进去运行的，所以对于这种没有使用springboot的项目，需要先拷贝依赖，然后创建成一个可运行jar包-->
     <build>
         <plugins>
             <plugin>

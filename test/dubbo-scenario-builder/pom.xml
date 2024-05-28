@@ -101,6 +101,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
+<!--                            打包之后的 入口类-->
                             <mainClass>org.apache.dubbo.scenario.builder.ScenarioBuilderMain</mainClass>
                         </manifest>
                     </archive>

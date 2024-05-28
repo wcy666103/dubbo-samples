@@ -17,6 +17,10 @@
 
 package org.apache.dubbo.scenario.builder;
 
+/**
+ * 主要入口，进行 scenario.sh 拷贝、 docker-compose-template.yml的模板化生成 新yml等
+ * 并且生成的 compose有自动 volume，将 app目录映射到当前文件的target目录下，就可以直接执行那个可执行jar包了
+ */
 public class ScenarioBuilderMain {
 
     public static void main(String[] args) throws Exception {

@@ -25,16 +25,23 @@ echo "FORK_COUNT: $maxForks"
 export DEBUG=$DEBUG
 echo "DEBUG=$DEBUG"
 
+# 这里指定了默认使用 3.2.6，如果没有这个环境变量就用这个版本
 DUBBO_VERSION=${DUBBO_VERSION:-3.2.6}
+# 如果 这个变量是空，那就手动指定好
 if [ "$CANDIDATE_VERSIONS" == "" ];then
   CANDIDATE_VERSIONS="dubbo.version:$DUBBO_VERSION;spring.version:5.3.30;spring-boot.version:1.5.13.RELEASE,2.7.16"
 #  CANDIDATE_VERSIONS="dubbo.version:2.7.12;spring.version:4.3.16.RELEASE,5.3.3;spring-boot.version:1.5.13.RELEASE,2.1.1.RELEASE"
 fi
+
 JAVA_VERSION="java.version"
+#检查变量CANDIDATE_VERSIONS中是否包含了字符串"java.version"。[[ ... ]]用于进行字符串匹配
 if [[ $CANDIDATE_VERSIONS != *$JAVA_VERSION* ]];then
+#    往上拼接 java的版本
   CANDIDATE_VERSIONS="$CANDIDATE_VERSIONS;java.version:$JAVA_VER"
 fi
 export CANDIDATE_VERSIONS=$CANDIDATE_VERSIONS
+#打印出导出的环境变量 CANDIDATE_VERSIONS 的值。[@] 是数组的展开语法，用于将数组中的所有元素作为单独的参数传递给 echo 命令。
+# 在这里，由于 CANDIDATE_VERSIONS 是以分号分隔的字符串，而不是数组，因此 [@] 在这里的作用相当于没有。
 echo "CANDIDATE_VERSIONS: ${CANDIDATE_VERSIONS[@]}"
 
 # test combination versions limit of single case
@@ -77,8 +84,11 @@ EXIT_IGNORED=120
 #-----------------------------------#
 # functions
 #-----------------------------------#
+
+# 拿到绝对路径的值
 abspath () { case "$1" in /*)printf "%s\n" "$1";; *)printf "%s\n" "$PWD/$1";; esac; }
 
+# 拿到错误信息 并且打印
 function get_error_msg() {
   log_file=$1
   error_msg=`grep $ERROR_MSG_FLAG $log_file`
@@ -86,6 +96,7 @@ function get_error_msg() {
   echo $error_msg
 }
 
+# 这个参数传递要弄清楚
 function print_log_file() {
   scenario_name=$1
   file=$2
@@ -101,6 +112,7 @@ function print_log_file() {
   fi
 }
 
+# 检查 test的镜像是否建立好了
 function check_test_image() {
     #check dubbo/sample-test image and version
     test_image="dubbo/sample-test:$JAVA_VER"
@@ -118,9 +130,11 @@ function process_case() {
   case_no=$2
 
   if [ -f $case_dir ]; then
+#      如果 $case_dir 是一个文件，dirname 命令将返回其所在的目录路径，并将结果赋值给 $case_dir
     case_dir=`dirname $case_dir`
   fi
 
+# 查找 config文件
   file=$case_dir/$CONFIG_FILE
   if [ ! -f $file ]; then
     echo "$TEST_FAILURE: case config not found: $file" | tee -a $testResultFile
@@ -135,17 +149,22 @@ function process_case() {
 
   ver_src_file=$case_dir/$VERSIONS_SOURCE_FILE
 
+# 开始时间
   case_start_time=$SECONDS
+#  项目目录
   project_home=`dirname $file`
+#  去 target中是为啥？
   scenario_home=$project_home/target
+#  从文件或目录路径中提取文件名或目录名
   scenario_name=`basename $project_home`
   log_prefix="[${case_no}/${totalCount}] [$scenario_name]"
   echo "$log_prefix Processing : $project_home .."
 
-  # generate version matrix
+  # generate version matrix 这个是动态生成到每个 maven项目的target内的 version-matrix.log 文件中去的
   version_log_file=$project_home/version-matrix.log
+#  里边的内容就这样：  -Ddubbo.version=3.3.0-beta.1 -Dspring.version=6.1.3 -Djava.version=17
   version_matrix_file=$project_home/version-matrix.txt
-#  java -jar 运行 VersionMatcher  进行版本匹配
+#  java -jar 运行 VersionMatcher  进行版本匹配  并且通过 -D去设置属性让类里边直接去用
   java -DcandidateVersions="$CANDIDATE_VERSIONS" \
     -DcaseVersionsFile="$ver_file" \
     -DcaseVersionSourcesFile="$ver_src_file" \
@@ -153,10 +172,11 @@ function process_case() {
     -cp $test_builder_jar \
     org.apache.dubbo.scenario.builder.VersionMatcher &> $version_log_file
   result=$?
+#  如果上一行 sh 执行结果不是 0，就证明有问题，然后进行错误判断和提取
   if [ $result -ne 0 ]; then
     #extract error msg 提取error信息
     error_msg=`get_error_msg $version_log_file`
-
+#  如果对应的码是 不匹配
     if [ $result -eq $EXIT_UNMATCHED ]; then
       echo "$log_prefix $TEST_IGNORED: Version not match:$error_msg" | tee -a $testResultFile
     else
@@ -170,11 +190,13 @@ function process_case() {
     return 1
   fi
 
+# 统计版本矩阵文件中的行数，即版本数量，并将结果存储在 version_count 变量中
   version_count=`grep -c "" $version_matrix_file `
   echo "$log_prefix Version matrix: $version_count"
   cat $version_matrix_file
 
   version_no=0
+#   这里会读取每一行，所以会对每行的版本都进行测试，而version_no也都是会作为其容器名字后缀，以作不同版本的区分
   while read -r version_profile; do
     start_time=$SECONDS
     version_no=$((version_no + 1))
@@ -192,6 +214,7 @@ function process_case() {
       find . -name target -d | xargs -I {} sudo rm -rf {}
     fi
 
+# 使用 Maven 构建项目，根据当前的版本配置 $version_profile 执行构建操作，并将构建日志输出到指定的日志文件中。
     mvn $BUILD_OPTS $version_profile &> $project_home/mvn.log
     result=$?
     if [ $result -ne 0 ]; then
@@ -204,6 +227,7 @@ function process_case() {
 
     # generate case configuration
     mkdir -p $scenario_home/logs
+
     scenario_builder_log=$scenario_home/logs/scenario-builder.log
     echo "$log_prefix Generating test case configuration .."
     config_time=$SECONDS
@@ -215,6 +239,8 @@ function process_case() {
       -Ddebug.service=$DEBUG \
       $version_profile \
       -jar $test_builder_jar  &> $scenario_builder_log
+#   scenario_builder_log的内容就这：   outputDir: /home/wcy_spark/dubbo-samples/3-extensions/configcenter/dubbo-samples-configcenter-apollo/target
+#   但是运行这个jar包会做很多动作，比如 copy 并且生成 docker-compose、scenario.sh、docker日志目录等等
     result=$?
     if [ $result -ne 0 ]; then
       error_msg=`get_error_msg $scenario_builder_log`
@@ -229,10 +255,13 @@ function process_case() {
     # run test
     echo "$log_prefix Running test case .."
     running_time=$SECONDS
+#    每个 maven 项目的target中都会被 复制这个sh，以及 scenario-builder中存储的 docker-compose.yml
+#    执行这个 sh，里边会自动执行 docker-compose.yml以及一些善后工作，
     bash $scenario_home/scenario.sh
     result=$?
     end_time=$SECONDS
 
+#   根据运行结果做一些东西
     if [ $result == 0 ]; then
       echo "$log_prefix $TEST_SUCCESS with version: $version_profile, cost $((end_time - start_time)) s"
     else
@@ -293,6 +322,7 @@ echo "Test reports dir: \${project.basedir}/target/test-reports"
 mkdir -p $TEST_DIR/jobs
 testListFile=$TEST_DIR/jobs/testjob.txt
 targetTestcases=$1
+# 脚本是兼容传递有参数的  这个环境变量是在 ci中设置的有
 if [ "$targetTestcases" != "" ];then
   targetTestcases=`abspath $targetTestcases`
   if [ -d "$targetTestcases" ] || [ -f "$targetTestcases" ]; then
@@ -302,10 +332,12 @@ if [ "$targetTestcases" != "" ];then
     echo "Testcase not exist: $targetTestcases"
     exit 1
   fi
+#  如果没传递参数
 else
   # use input testcases file
   if [ "$TEST_CASE_FILE" != "" ]; then
     testListFile=$TEST_CASE_FILE
+#    如果这个文件是空
     if [ ! -f $testListFile ]; then
       echo "Testcases file not found: $testListFile"
       exit 1
@@ -319,6 +351,7 @@ else
   fi
 fi
 
+# 这是给 prepare.sh 里边的东西又重复了一遍啊
 totalCount=`grep "" -c $testListFile`
 echo "Total test cases : $totalCount"
 
@@ -346,7 +379,7 @@ if [ $result -ne 0 ]; then
   exit $result
 fi
 
-# find jar
+# find jar of scenario-builder
 test_builder_jar=`ls $SCENARIO_BUILDER_DIR/target/dubbo-scenario-builder*-with-dependencies.jar`
 if [ "$test_builder_jar" == "" ]; then
   echo "dubbo-scenario-builder jar not found"
@@ -365,6 +398,7 @@ testStartTime=$SECONDS
 allTest=0
 finishedTest=0
 
+# read 命令会从标准输入中读取一行内容，并将其存储在 path 变量中
 while read path
 do
   allTest=$((allTest + 1))
@@ -372,7 +406,7 @@ do
   if [ -f $path ];then
     path=`dirname $path`
   fi
-  # fork process testcase
+  # fork process testcase 函数处理当前测试用例，并将处理过程放入后台执行。
   process_case $path $allTest &
   sleep 1
 
