@@ -2,6 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# 需要他传递参数，根据参无数来进行 image 的删除
 echo "Killing dubbo containers .."
 docker ps -a | grep dubbo | awk '{ print $1}' | xargs -I {} docker kill {}
 
