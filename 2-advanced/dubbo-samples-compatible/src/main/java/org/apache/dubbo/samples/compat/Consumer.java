@@ -19,6 +19,7 @@
 
 package org.apache.dubbo.samples.compat;
 
+import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.samples.basic.api.DemoService;
 import org.apache.dubbo.samples.basic.api.User;
 
@@ -30,6 +31,10 @@ public class Consumer {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-compat-consumer.xml");
         context.start();
         DemoService demoService = (DemoService) context.getBean("demoService");
+
+        System.out.println("RpcContext.getServiceContext() ===== " + RpcContext.getClientAttachment());
+        RpcContext.getClientAttachment().setAttachment("demo", "demo001");
+
         String hello = demoService.sayHello("world");
         System.out.println(hello);
         User user = demoService.getUser(1);

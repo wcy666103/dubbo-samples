@@ -19,6 +19,7 @@
 
 package org.apache.dubbo.samples.basic.impl;
 
+import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.samples.basic.api.DemoService;
 import org.apache.dubbo.samples.basic.api.Phone;
 import org.apache.dubbo.samples.basic.api.User;
@@ -32,6 +33,10 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public String sayHello(String name) {
+        System.out.println("RpcContext.getContext().getAttachment(\"demo\") = " + RpcContext.getContext().getAttachment("demo"));
+        System.out.println("RpcContext.getServerAttachment().getAttachment(\"demo\") = " + RpcContext.getServerAttachment().getAttachment("demo"));
+        System.out.println("RpcContext.getClientAttachment().getAttachment(\"demo\") = " + RpcContext.getClientAttachment().getAttachment("demo"));
+
         System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] Hello " + name +
                 ", request from consumer: " + getContext().getRemoteAddress());
         return "Hello " + name + ", response from provider: " + getContext().getLocalAddress();

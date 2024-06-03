@@ -44,6 +44,15 @@ public class DemoServiceIT {
         Thread.sleep(2000);
     }
 
+    /**
+     * impl中有将服务的端口 传递的内容
+     * 广播测试的实现思路： clusterInvoker.invoke(invocation);
+     *         assertTrue(invoker1.isInvoked());
+     *         assertTrue(invoker2.isInvoked());
+     *         assertTrue(invoker3.isInvoked());
+     *         assertTrue(invoker4.isInvoked());
+     * @throws Exception
+     */
     @Test
     public void testDemoService() throws Exception {
         String result = demoService.sayHello("world");

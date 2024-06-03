@@ -1,1 +1,2 @@
 trace1=org.apache.dubbo.samples.basic.filter.TraceFilter
+demoFilter=org.apache.dubbo.samples.basic.filter.DemoFilter

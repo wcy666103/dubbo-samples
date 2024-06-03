@@ -19,4 +19,4 @@ dubbo:
     name: dubbo-protocol-consumer
     qos-enable: false
   registry:
-      address: nacos://${nacos.address:localhost}:8848?username=nacos&password=nacos
+      address: zookeeper://${nacos.address:localhost}:2181

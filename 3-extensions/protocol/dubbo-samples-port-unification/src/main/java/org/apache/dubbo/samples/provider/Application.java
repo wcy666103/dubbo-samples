@@ -42,6 +42,8 @@ public class Application {
                 "zookeeper://" + zookeeperHost + ":" + zookeeperPort));
         service.setInterface(GreetingService.class);
         service.setRef(new GreetingServiceImpl());
+//        todo bug 默认使用的hessian序列化方式在高版本的jdk中是会报错的！！
+        service.setSerialization("fastjson2");
         service.setProtocol(protocolConfig);
         service.export();
 

@@ -23,4 +23,4 @@ dubbo:
     port: 20880
     ext-protocol: tri
   registry:
-    address: nacos://${nacos.address:localhost}:8848?username=nacos&password=nacos
+    address: zookeeper://${zookeeper.address:localhost}:2181

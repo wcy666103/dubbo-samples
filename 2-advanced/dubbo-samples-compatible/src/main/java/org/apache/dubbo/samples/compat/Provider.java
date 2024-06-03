@@ -19,6 +19,7 @@
 
 package org.apache.dubbo.samples.compat;
 
+import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.concurrent.CountDownLatch;
@@ -32,6 +33,7 @@ public class Provider {
         context.start();
 
         System.out.println("dubbo service started");
+        System.out.println("RpcContext.getContext().getAttachment(\"demo\") = " + RpcContext.getContext().getAttachment("demo"));
         new CountDownLatch(1).await();
     }
 

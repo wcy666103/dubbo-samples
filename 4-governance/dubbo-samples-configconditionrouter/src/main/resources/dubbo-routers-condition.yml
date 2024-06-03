@@ -23,8 +23,11 @@ force: true
 runtime: true
 enabled: true
 priority: 2
+#作用的是这个app，使用的是 application name这个参数
 key: governance-conditionrouter-consumer
+# case-configuration 中指定了这个 provider是启动两个的
 conditions:
+#    设置调用的class和方法 => 这个符号就是起效的条件
 - interface=org.apache.dubbo.samples.governance.api.DemoService&method=sayHello=>address=*:20880
 - interface=org.apache.dubbo.samples.governance.api.DemoService2&method=sayHello=>address=*:20881
 ...

@@ -15,28 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.dubbo.samples.basic.filter;
+package org.apache.dubbo.samples.provider;
 
-import org.apache.dubbo.samples.basic.api.User;
+import org.apache.dubbo.samples.api.GreetingsService;
 
-import com.alibaba.dubbo.common.extension.Activate;
-import com.alibaba.dubbo.rpc.Filter;
-import com.alibaba.dubbo.rpc.Invocation;
-import com.alibaba.dubbo.rpc.Invoker;
-import com.alibaba.dubbo.rpc.Result;
-import com.alibaba.dubbo.rpc.RpcException;
-
-@Activate(group = {"provider"})
-public class TraceFilter implements Filter {
+public class GreetingsServiceImpl implements GreetingsService {
     @Override
-    public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        Result result = invoker.invoke(invocation);
-        System.out.println("进去-----");
-        Object o = result.getValue();
-        if (o instanceof User) {
-            User u = (User) o;
-            u.setName("filtered: " + u.getName());
-        }
-        return result;
+    public String sayHi(String name) {
+        return "hi, " + name;
     }
 }

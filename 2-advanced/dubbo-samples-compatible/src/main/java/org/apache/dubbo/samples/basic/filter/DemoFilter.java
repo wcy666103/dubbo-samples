@@ -17,26 +17,29 @@
 
 package org.apache.dubbo.samples.basic.filter;
 
-import org.apache.dubbo.samples.basic.api.User;
-
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.Filter;
 import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.Result;
 import com.alibaba.dubbo.rpc.RpcException;
+import org.apache.dubbo.common.constants.CommonConstants;
+import org.apache.dubbo.rpc.RpcContext;
+import org.apache.dubbo.samples.basic.api.User;
 
-@Activate(group = {"provider"})
-public class TraceFilter implements Filter {
+@Activate(group = CommonConstants.CONSUMER)
+public class DemoFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
+        System.out.println("RpcContext.getServiceContext() = " + RpcContext.getClientAttachment());
+        RpcContext.getClientAttachment().setAttachment("demo", "demo002");
+        RpcContext.getContext().setAttachment("demo","demo02");
+//        RpcContext.getContext().setAttachment("demo", "demo002");
+
+        invocation.setAttachment("demo","demo2");
+        System.out.println("进去调用");
+        System.out.println("RpcContext.getServiceContext().getAttachment(\"demo\") = " + RpcContext.getClientAttachment().getAttachment("demo"));
         Result result = invoker.invoke(invocation);
-        System.out.println("进去-----");
-        Object o = result.getValue();
-        if (o instanceof User) {
-            User u = (User) o;
-            u.setName("filtered: " + u.getName());
-        }
         return result;
     }
 }
