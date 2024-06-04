@@ -31,6 +31,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+<!--        这个插件似乎有问题，如果 2-advanced 项目中所有的都没声明是他的儿子，否则这个属性和配置可能直接传递下去-->
+<!--        broadcast 模块中 我建立了 父亲关系之后，这个plugin就一直报错，是因为冲突？？？ 并且只能jdk8 才能通过-->
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
     </properties>
