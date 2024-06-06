@@ -25,7 +25,7 @@ import org.springframework.web.client.RestClient;
 
 @Component
 public class Task implements CommandLineRunner {
-    @DubboReference
+    @DubboReference(timeout = 20000)
     private DemoService demoService;
 
     @Override
