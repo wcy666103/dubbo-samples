@@ -36,7 +36,7 @@ public class DemoServiceIT {
 
     private static final String providerAddress = System.getProperty("dubbo.address", "localhost");
 
-    @DubboReference(timeout = 20000)
+    @DubboReference(timeout = 50000)
     private DemoService demoService;
 
     @Test

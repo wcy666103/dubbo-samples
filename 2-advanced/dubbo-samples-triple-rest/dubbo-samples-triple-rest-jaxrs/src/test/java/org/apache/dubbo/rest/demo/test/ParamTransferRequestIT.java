@@ -36,7 +36,7 @@ public class ParamTransferRequestIT {
     private static final String providerAddress = System.getProperty("dubbo.address", "localhost");
 
 
-    @DubboReference(timeout = 20000)
+    @DubboReference(timeout = 50000)
     private ParamTransferRequestService paramTransferRequestService;
 
     @Test

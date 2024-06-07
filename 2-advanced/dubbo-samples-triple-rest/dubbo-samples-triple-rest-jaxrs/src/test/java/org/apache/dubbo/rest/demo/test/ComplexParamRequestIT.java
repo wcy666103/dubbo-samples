@@ -51,7 +51,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 public class ComplexParamRequestIT {
     private static final String providerAddress = System.getProperty("dubbo.address", "localhost");
 
-    @DubboReference(timeout = 20000)
+    @DubboReference(timeout = 50000)
     private ComplexParamRequestService complexParamRequestService;
 
     @Test

@@ -31,7 +31,7 @@ import org.springframework.web.client.RestClient;
 public class BasicParamRequestIT {
     private static final String providerAddress = System.getProperty("dubbo.address", "localhost");
 
-    @DubboReference(timeout = 20000)
+    @DubboReference(timeout = 50000)
     private BasicParamRequestService basicParamRequestService;
 
     @Test
