@@ -39,8 +39,11 @@ public class DemoServiceIT {
 
     @BeforeClass
     public static void setUp() throws Exception {
+//        初始化 zkclient
         ZKTools.initClient();
+//        生成 str类型的router 并且进行注册
         ZKTools.generateAppevelRouter();
+
         Thread.sleep(2000);
     }
 

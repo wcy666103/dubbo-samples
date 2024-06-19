@@ -15,9 +15,25 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
-#
 
 
+# spec: 表示一个键（key）为 spec 的字典（map）。
+#dubbo: 表示 spec 字典中的一个键，值是一个列表（因为下面接了一个 - 符号）。
+#列表的第一个元素是一个字典，其中包含 routedetail 和 services 两个键：
+#routedetail: 下面是一个列表，包含两个元素。
+#第一个元素是一个字典，包含 match、name 和 route 键。
+#match: 是一个列表，包含一个字典 {sourceLabels: {trafficLabel: xxx}}。
+#name: 是字符串 other-condition。
+#route: 是一个列表，包含一个字典 {destination: {host: demo, subset: other}}。
+#第二个元素是一个字典，包含 name 和 route 键。
+#name: 是字符串 center-match。
+#route: 是一个列表，包含一个字典 {destination: {host: demo, subset: center}}。
+#services: 下面是一个列表，包含一个字典 {regex: org.apache.dubbo.samples.governance.api.DemoService.*}。
+#hosts: 是 spec 字典中的另一个键，值是一个包含字符串 demo 的列表。
+#用 - 符号来表示列表项在 YAML 配置中非常常见，便于定义多个配置项或属性
+
+
+# RuleUtil.generateRule() 方法对该文件进行 rule的转换 并且该文件会被完整的写入 configcenter，该案例是zk，位置在 /dubbo/config/dubbo/governance-mesh-rule-router-provider.MESHAPPRULE
 apiVersion: service.dubbo.apache.org/v1alpha1
 kind: VirtualService
 metadata: {name: demo-route}

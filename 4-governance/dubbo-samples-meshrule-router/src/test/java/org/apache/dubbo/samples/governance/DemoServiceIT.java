@@ -37,7 +37,9 @@ public class DemoServiceIT {
 
     @BeforeClass
     public static void setUp() throws Exception {
+//        init CuratorClient
         RuleUtil.initClient();
+//        根据配置文件生成rul
         RuleUtil.generateRule();
         Thread.sleep(1000);
     }

@@ -15,8 +15,10 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
-#
-
+# 该文档写入admin之后才是有效的，因为他会对注册地址的config进行写入，然后对应的地方才会生效
+# 该文件在这里没有任何作用，就是让人家看看是怎么写的
+#在 YAML 文件中，--- 用于分隔多个独立的文档。
+#这种用法特别有用在 Kubernetes 等系统中，一个 YAML 文件中可能包含多个配置对象，每个对象通常用 --- 分隔开。每个独立的文档都可以包含一个完整的 YAML 配置。
 ---
 scope: application
 force: true
@@ -31,3 +33,4 @@ conditions:
 - interface=org.apache.dubbo.samples.governance.api.DemoService&method=sayHello=>address=*:20880
 - interface=org.apache.dubbo.samples.governance.api.DemoService2&method=sayHello=>address=*:20881
 ...
+#... 用于标记文档的结束（可选）。
